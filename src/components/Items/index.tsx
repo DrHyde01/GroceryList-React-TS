@@ -1,6 +1,5 @@
 import { ItemsData } from "../List";
 import { IoCloseOutline } from "react-icons/io5";
-
 interface Props {
   id: string;
   item: string;
