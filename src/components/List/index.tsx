@@ -54,6 +54,12 @@ const List: React.FC = () => {
     setSuggestion([]);
   };
 
+  const handleClick = (e: any) => {
+    setSuggestion([]);
+    setItem(e.target.innerText);
+    setSuggestionShow(false);
+  };
+
   // Add state to LocalStorage
   useEffect(() => {
     localStorage.setItem("list", JSON.stringify(list));
@@ -68,7 +74,7 @@ const List: React.FC = () => {
 
   return (
     <Fragment>
-      <div className="flex flex-col items-center min-h-screen w-full px-6 md:px-20 lg:px-0 py-10  bg-gray-50">
+      <div className="flex flex-col items-center min-h-screen w-full px-6 md:px-20 lg:px-0 py-10 bg-gray-50">
         <form
           onSubmit={handleSubmit}
           className="flex flex-col md:flex-row justify-center items-center w-full p-2.5 lg:m-10 animate-titleAppear"
@@ -92,9 +98,17 @@ const List: React.FC = () => {
         </form>
 
         {suggestionShow ? (
-          <ul className="suggestions">
+          <ul className="flex flex-col w-full md:w-1/2 xl:w-1/3 bg-white shadow-lg animate-titleAppear">
             {suggestion.map((suggestion, index) => {
-              return <li key={index}>{suggestion}</li>;
+              return (
+                <li
+                  key={index}
+                  onClick={handleClick}
+                  className="p-3 hover:bg-customGreen hover:text-white cursor-pointer"
+                >
+                  {suggestion}
+                </li>
+              );
             })}
           </ul>
         ) : (
