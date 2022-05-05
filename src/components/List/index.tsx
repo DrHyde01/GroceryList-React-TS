@@ -4,7 +4,7 @@ import ReactTooltip from "react-tooltip";
 import { AiOutlinePlus } from "react-icons/ai";
 import { IoBasketOutline, IoTrashOutline } from "react-icons/io5";
 import Items from "../Items";
-
+import { data } from "../../data/itemsData.js";
 export interface ItemsData {
   item: string;
   id: string;
@@ -12,7 +12,6 @@ export interface ItemsData {
 
 const getLocalStorageData = () => {
   let list = localStorage.getItem("list");
-
   if (list) {
     return (list = JSON.parse(localStorage.getItem("list") || ""));
   } else {
@@ -21,12 +20,25 @@ const getLocalStorageData = () => {
 };
 
 const List: React.FC = () => {
-  const [item, setItem] = useState("");
+  const [item, setItem] = useState<string>("");
   const [list, setList] = useState<ItemsData[]>(getLocalStorageData);
+  const [suggestion, setSuggestion] = useState<string[]>([]);
+  const [suggestionShow, setSuggestionShow] = useState<boolean>(false);
 
   //Add item from the input
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setItem(e.target.value);
+    const query = e.target.value;
+    setItem(query);
+    if (query.length > 1) {
+      const suggestionFilter = data.filter(
+        (suggestion) => suggestion.indexOf(query) > -1
+      );
+      setSuggestion(suggestionFilter);
+      setSuggestionShow(true);
+    } else {
+      setSuggestionShow(false);
+      setSuggestion([]);
+    }
   };
 
   // And move item to the state
@@ -38,6 +50,8 @@ const List: React.FC = () => {
     e.preventDefault();
     setList([...list, newItem]);
     setItem("");
+    setSuggestionShow(false);
+    setSuggestion([]);
   };
 
   // Add state to LocalStorage
@@ -48,11 +62,13 @@ const List: React.FC = () => {
   // Clean state and localStorage
   const cleanItems = () => {
     setList([]);
+    setSuggestionShow(false);
+    setSuggestion([]);
   };
 
   return (
     <Fragment>
-      <div className="flex flex-col items-center min-h-screen w-full px-6 md:px-20 lg:px-0 py-10 bg-gray-50">
+      <div className="flex flex-col items-center min-h-screen w-full px-6 md:px-20 lg:px-0 py-10  bg-gray-50">
         <form
           onSubmit={handleSubmit}
           className="flex flex-col md:flex-row justify-center items-center w-full p-2.5 lg:m-10 animate-titleAppear"
@@ -61,7 +77,7 @@ const List: React.FC = () => {
             onChange={handleChange}
             type="text"
             value={item}
-            className="border-2 border-solid border-gray-400 bg-white w-full  md:w-1/2 lg:w-1/3 2xl:w-1/4 h-12 pl-2  focus:outline-none  focus:border-customGreen"
+            className="border-2 border-solid border-gray-400 bg-white w-full  md:w-1/2 lg:w-1/3 2xl:w-1/4 h-12 pl-2 focus:outline-none  focus:border-customGreen"
             placeholder="Add a product"
             required
           />
@@ -74,6 +90,16 @@ const List: React.FC = () => {
             <AiOutlinePlus size={25} color={"white"} />
           </button>
         </form>
+
+        {suggestionShow ? (
+          <ul className="suggestions">
+            {suggestion.map((suggestion, index) => {
+              return <li key={index}>{suggestion}</li>;
+            })}
+          </ul>
+        ) : (
+          <ul className="hidden"></ul>
+        )}
 
         {list.length > 0 ? (
           <Fragment>
