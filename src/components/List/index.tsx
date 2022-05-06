@@ -26,8 +26,10 @@ const List: React.FC = () => {
   const [suggestionShow, setSuggestionShow] = useState<boolean>(false);
 
   //Add item from the input
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value;
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLInputElement>
+  ) => {
+    const query = e.currentTarget.value;
     setItem(query);
     if (query.length > 1) {
       const suggestionFilter = data.filter(
@@ -42,9 +44,7 @@ const List: React.FC = () => {
   };
 
   // And move item to the state
-  const handleSubmit = (
-    e: React.MouseEvent<HTMLFormElement> | React.MouseEvent<HTMLFormElement>
-  ) => {
+  const handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     const newItem: ItemsData = {
       item: item,
       id: uuidv4(),
