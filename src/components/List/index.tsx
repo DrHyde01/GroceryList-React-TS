@@ -26,10 +26,8 @@ const List: React.FC = () => {
   const [suggestionShow, setSuggestionShow] = useState<boolean>(false);
 
   //Add item from the input
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLInputElement>
-  ) => {
-    const query = e.currentTarget.value;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
     setItem(query);
     if (query.length > 1) {
       const suggestionFilter = data.filter(
