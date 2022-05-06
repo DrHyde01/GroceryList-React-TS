@@ -27,7 +27,7 @@ const List: React.FC = () => {
 
   //Add item from the input
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value;
+    const query = e.currentTarget.value;
     setItem(query);
     if (query.length > 1) {
       const suggestionFilter = data.filter(
