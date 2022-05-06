@@ -77,7 +77,7 @@ const List: React.FC = () => {
       <div className="flex flex-col items-center min-h-screen w-full px-6 md:px-20 lg:px-0 py-10 bg-gray-50">
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col md:flex-row justify-center items-center w-full p-2.5 lg:m-10 animate-titleAppear"
+          className="flex flex-col md:flex-row justify-center items-center w-full p-2.5 lg:m-10 animate-titleAppear relative"
         >
           <input
             onChange={handleChange}
@@ -95,25 +95,24 @@ const List: React.FC = () => {
             <ReactTooltip id="addBtn" place="top" type="light" effect="solid" />
             <AiOutlinePlus size={25} color={"white"} />
           </button>
+          {suggestionShow ? (
+            <ul className="flex flex-col w-full lg:w-1/2 2xl:w-1/3 bg-white shadow-lg animate-titleAppear absolute top-16 z-10">
+              {suggestion.map((suggestion, index) => {
+                return (
+                  <li
+                    key={index}
+                    onClick={handleClick}
+                    className="p-3 hover:bg-customGreen hover:text-white cursor-pointer"
+                  >
+                    {suggestion}
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <ul className="hidden"></ul>
+          )}
         </form>
-
-        {suggestionShow ? (
-          <ul className="flex flex-col w-full md:w-1/2 xl:w-1/3 bg-white shadow-lg animate-titleAppear">
-            {suggestion.map((suggestion, index) => {
-              return (
-                <li
-                  key={index}
-                  onClick={handleClick}
-                  className="p-3 hover:bg-customGreen hover:text-white cursor-pointer"
-                >
-                  {suggestion}
-                </li>
-              );
-            })}
-          </ul>
-        ) : (
-          <ul className="hidden"></ul>
-        )}
 
         {list.length > 0 ? (
           <Fragment>
